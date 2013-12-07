@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0"
+         metadata-complete="true">
+
+    <!-- 对静态资源不要用spring mvc拦截，放在 DispatcherServlet之前 -->
+<!--    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>-->
+
+    <!-- spring mvc 配置 -->
+    <servlet>
+        <servlet-name>spring-mvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:applicationContext.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>spring-mvc</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+
+    <!-- listener -->
+    <listener>
+        <listener-class>com.doufangbian.listener.StaticLoadListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>CodeFilter</filter-name>
+        <filter-class>com.doufangbian.filter.CodeFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CodeFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--    <filter>
+            <filter-name>CheckLogin</filter-name>
+            <filter-class>com.doufangbian.filter.CheckLogin</filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>CheckLogin</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>-->
+
+    <!-- 添加URI -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:org/codehaus/xfire/spring/xfire.xml</param-value>
+    </context-param>
+
+    <!-- <servlet> <servlet-name>xfire</servlet-name> <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>0</load-on-startup> </servlet> -->
+
+    <!--    <servlet>
+            <servlet-name>XFireServlet</servlet-name>
+            <servlet-class>org.codehaus.xfire.transport.http.XFireConfigurableServlet</servlet-class>
+            <load-on-startup>0</load-on-startup>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>XFireServlet</servlet-name>
+            <url-pattern>/services/*</url-pattern>
+        </servlet-mapping>-->
+
+
+    <servlet>
+        <servlet-name>AdminLoginServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.AdminLoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MerchantsServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.MerchantsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AreasServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.AreasServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UsersServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.UsersServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>WeibosServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.WeibosServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdvertisingsServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.AdvertisingsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CityInfoServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.CityInfoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProvincialServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.ProvincialServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Dfb_weibo_replyServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.Dfb_weibo_replyServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>WeibocomentreplylistInfoServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.WeibocomentreplylistInfoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Dfb_merchant_catServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.Dfb_merchant_catServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Dfb_merchant_groupServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.Dfb_merchant_groupServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Dfb_catgroup_mapServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.Dfb_catgroup_mapServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Dfb_groupmerchant_mapServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.Dfb_groupmerchant_mapServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Dfb_merchant_imageServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.Dfb_merchant_imageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Dfb_merchant_commentServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.Dfb_merchant_commentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TestUpServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.TestUpServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Merchant_comment_allServlet</servlet-name>
+        <servlet-class>com.doufangbian.servlet.Merchant_comment_allServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoufangbianToJsonInterface</servlet-name>
+        <servlet-class>com.doufangbian.iphoneservlet.DoufangbianToJsonInterface</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>AdminLoginServlet</servlet-name>
+        <url-pattern>/AdminLoginServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MerchantsServlet</servlet-name>
+        <url-pattern>/MerchantsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AreasServlet</servlet-name>
+        <url-pattern>/AreasServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UsersServlet</servlet-name>
+        <url-pattern>/UsersServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WeibosServlet</servlet-name>
+        <url-pattern>/WeibosServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdvertisingsServlet</servlet-name>
+        <url-pattern>/AdvertisingsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CityInfoServlet</servlet-name>
+        <url-pattern>/CityInfoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProvincialServlet</servlet-name>
+        <url-pattern>/ProvincialServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dfb_weibo_replyServlet</servlet-name>
+        <url-pattern>/Dfb_weibo_replyServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WeibocomentreplylistInfoServlet</servlet-name>
+        <url-pattern>/WeibocomentreplylistInfoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dfb_merchant_catServlet</servlet-name>
+        <url-pattern>/Dfb_merchant_catServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dfb_merchant_groupServlet</servlet-name>
+        <url-pattern>/Dfb_merchant_groupServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dfb_catgroup_mapServlet</servlet-name>
+        <url-pattern>/Dfb_catgroup_mapServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dfb_groupmerchant_mapServlet</servlet-name>
+        <url-pattern>/Dfb_groupmerchant_mapServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dfb_merchant_imageServlet</servlet-name>
+        <url-pattern>/Dfb_merchant_imageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dfb_merchant_commentServlet</servlet-name>
+        <url-pattern>/Dfb_merchant_commentServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TestUpServlet</servlet-name>
+        <url-pattern>/TestUpServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Merchant_comment_allServlet</servlet-name>
+        <url-pattern>/Merchant_comment_allServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoufangbianToJsonInterface</servlet-name>
+        <url-pattern>/DoufangbianToJsonInterface</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>admin/login.jsp</welcome-file>
+    </welcome-file-list>
+
+
+</web-app>
