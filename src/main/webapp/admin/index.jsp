@@ -4,9 +4,7 @@
 
 <%
     String path = request.getContextPath();
-    String basePath = request.getScheme() + "://"
-            + request.getServerName() + ":" + request.getServerPort()
-            + path + "/";
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -78,7 +76,7 @@
             <ul id="main-nav">
                 <!-- Accordion Menu -->
                 <li>
-                    <a href="admin/merchant_table.jsp" target="table" class="nav-top-item no-submenu" id="menu_1">
+                    <a href="admin/merchants.action" target="table" class="nav-top-item no-submenu" id="menu_1">
                         <!-- Add the class "no-submenu" to menu items with no sub menu -->
                         商家管理</a>
                     <ul>

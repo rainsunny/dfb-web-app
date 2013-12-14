@@ -40,8 +40,7 @@
             text-align: center;
         }
     </style>
-    <link rel="stylesheet" href="admin/resources/css/showstyle.css"
-          type="text/css" media="screen"/>
+    <link rel="stylesheet" href="admin/resources/css/showstyle.css" type="text/css" media="screen"/>
     <!-- Reset Stylesheet -->
     <link rel="stylesheet" href="admin/resources/css/reset.css" type="text/css" media="screen"/>
     <!-- Main Stylesheet -->

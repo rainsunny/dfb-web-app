@@ -322,6 +322,7 @@ CREATE TABLE `merchantinfo` (
   `seecount` int(11) NOT NULL DEFAULT '0' COMMENT '浏览量',
   `share` int(11) NOT NULL DEFAULT '0' COMMENT '分享次数',
   `state` tinyint(1) DEFAULT '1' COMMENT '0表示禁用，1表示启用',
+  `group_id` int(10),
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1669 DEFAULT CHARSET=utf8;
 

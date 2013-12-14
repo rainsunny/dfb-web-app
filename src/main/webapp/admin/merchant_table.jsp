@@ -6,15 +6,7 @@
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
-<%
-    String keywords = request.getParameter("keywords");
-    if (keywords != null && !keywords.equals("") && "get".equalsIgnoreCase(request.getMethod())) {
-        keywords = new String(keywords.getBytes("iso-8859-1"), "utf-8");
-    }
-    if (keywords == null) {
-        keywords = "";
-    }
-%>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -62,16 +54,17 @@
                 }
                 if ($(this).val() == 0) {
                     $("#search_group_city").val("0");
-                    window.location.href = "<%=basePath%>admin/merchant_table.jsp?catId=" + $(this).val() + "&state=" + state;
+                    window.location.href = "<%=basePath%>admin/merchants.do?catId=" + $(this).val() + "&state=" + state;
                 } else {
                     $("#search_group_city").val("0");
-                    window.location.href = "<%=basePath%>admin/merchant_table.jsp?catId=" + $(this).val() + "&groupId=" + $("#search_group_city").val() + "&state=" + state;
+                    window.location.href = "<%=basePath%>admin/merchants.do?catId=" + $(this).val() + "&groupId=" + $("#search_group_city").val() + "&state=" + state;
                 }
             });
 
             $("#search_group_city").change(function () {
-                window.location.href = "<%=basePath%>admin/merchant_table.jsp?groupId=" + $(this).val() + "&catId=" + $("#search_group_provincial").val();
+                window.location.href = "<%=basePath%>admin/merchants.do?groupId=" + $(this).val() + "&catId=" + $("#search_group_provincial").val();
             });
+
             $("#seach").click(function () {
                 var enabled = $("#enabled").val();
                 if (enabled == '查看禁用商家') {
@@ -81,6 +74,7 @@
                 }
             });
         });
+
         function del(id) {
             if (confirm("您确定要删除此商家的信息吗?") == true) {
                 $.post("MerchantsServlet?op=delete&merchantId=" + id, function (data) {
@@ -93,6 +87,7 @@
                 });
             }
         }
+
         function enabled(id, state) {
             if (confirm("您确定要--" + (state == 0 ? '禁用' : '启用') + "--此商家吗?") == true) {
                 $.post("MerchantsServlet?op=enabled&merchantId=" + id + "&state=" + state, function (data) {
@@ -109,21 +104,24 @@
 </head>
 
 <body>
+
 <div class="content-box">
     <!-- Start Content Box -->
-    <form action="admin/merchant_table.jsp" method="post">
+    <form action="admin/merchants.do" method="post">
         <div class="content-box-header">
             <h3>
                 商家管理
             </h3>
-            <c:import url="../Dfb_merchant_catServlet?op=query"/>
+
+            <%--<c:import url="../Dfb_merchant_catServlet?op=query"/>--%>
             <select id="search_group_provincial" name="catId">
                 <option value="0" selected="selected">所有大组</option>
                 <c:forEach items="${listCat}" var="cat">
                     <option value="${cat.id}" ${param['catId']==cat.id?'selected':''}>${cat.name}</option>
                 </c:forEach>
             </select>
-            <c:import url="../Dfb_merchant_groupServlet?op=query"/>
+
+            <%--<c:import url="../Dfb_merchant_groupServlet?op=query"/>--%>
             <select id="search_group_city" name="groupId">
                 <c:if test="${level!=2}">
                     <option value="0" selected="selected">所有小组</option>
@@ -132,22 +130,27 @@
                     <option value="${group.id}" ${group.id==param['groupId']?'selected':''}>${group.name}</option>
                 </c:forEach>
             </select>
+
             <input type="text" id="keywords" class="input-medium" name="keywords"
-                   placeholder="请输入商家名称" value="<%=keywords %>"/>
+                   placeholder="请输入商家名称" value="${keywords}"/>
             <input class="button" type="submit" value="搜索商家" id="seach"/>
+
             <input type="hidden" value="${empty param['state']?0:param['state']==1?0:1}" name="state" id="state">
             <input class="button" type="submit" id="enabled"
                    value="${empty param['state']?'查看禁用商家':param['state']==1?'查看禁用商家':'查看启用商家'}"
                    style="float: right;margin-right: 20px;"/>
+
             <br/>
         </div>
     </form>
+
     <div class="content-box-content">
         <div class="tab-content default-tab">
             <table id="table">
+
                 <thead>
                 <tr>
-                    <c:import url="../MerchantsServlet?op=query"/>
+                    <%--<c:import url="../MerchantsServlet?op=query"/>--%>
                     <th>ID</th>
                     <th>Logo</th>
                     <th>名称</th>
@@ -159,6 +162,7 @@
                 </thead>
 
                 <tbody>
+
                 <c:forEach items="${pm.data}" var="merchantinfo">
                     <tr class="alt-row">
                         <td width="10%" align="center">${merchantinfo.id}</td>
@@ -177,7 +181,7 @@
                             <c:if test="${level==3}">
                                 <c:if test="${merchantinfo.countyID!=-1}">
                                     <a href="admin/merchant_set_group_table.jsp?mid=${merchantinfo.id}">设置组</a>
-                                    <a href="admin/updateMerchant.jsp?merchantId=${merchantinfo.id}&pageNo=${param['pageNo']}&catId=${param['catId']}&groupId=${param['groupId']}&keywords=<%=keywords %>"
+                                    <a href="admin/updateMerchant.jsp?merchantId=${merchantinfo.id}&pageNo=${param['pageNo']}&catId=${param['catId']}&groupId=${param['groupId']}&keywords=${keywords}"
                                        title='编辑' rel="modal"><img src='admin/resources/images/icons/pencil.png'/></a>
                                     <a href="admin/merchantImage_table.jsp?mid=${merchantinfo.id}">图片</a>
                                     <a href="javascript:del('${merchantinfo.id}')" title='删除'><img
@@ -189,7 +193,7 @@
                             </c:if>
                             <c:if test="${level==2 || level==1}">
                                 <c:if test="${merchantinfo.countyID!=-1}">
-                                    <a href="admin/updateMerchant.jsp?merchantId=${merchantinfo.id}&pageNo=${param['pageNo']}&catId=${param['catId']}&groupId=${param['groupId']}&keywords=<%=keywords %>"
+                                    <a href="admin/updateMerchant.jsp?merchantId=${merchantinfo.id}&pageNo=${param['pageNo']}&catId=${param['catId']}&groupId=${param['groupId']}&keywords=${keywords}"
                                        title='编辑' rel="modal"><img src='admin/resources/images/icons/pencil.png'/></a>
                                     <a href="admin/merchantImage_table.jsp?mid=${merchantinfo.id}">图片</a>
                                     <a href="javascript:del('${merchantinfo.id}')" title='删除'><img
@@ -200,7 +204,7 @@
                                 </c:if>
                             </c:if>
                             <c:if test="${level==0}">
-                                <a href="admin/updateMerchant.jsp?merchantId=${merchantinfo.id}&pageNo=${param['pageNo']}&catId=${param['catId']}&groupId=${param['groupId']}&keywords=<%=keywords %>"
+                                <a href="admin/updateMerchant.jsp?merchantId=${merchantinfo.id}&pageNo=${param['pageNo']}&catId=${param['catId']}&groupId=${param['groupId']}&keywords=${keywords}"
                                    title='编辑' rel="modal"><img src='admin/resources/images/icons/pencil.png'/></a>
                                 <a href="admin/merchantImage_table.jsp?mid=${merchantinfo.id}">图片</a>
                                 <a href="javascript:del('${merchantinfo.id}')" title='删除'><img
@@ -215,20 +219,23 @@
                         </td>
                     </tr>
                 </c:forEach>
+
                 </tbody>
+
                 <tfoot>
                 <tr>
                     <td id="page_go" colspan="7">
                         <c:if test="${!empty pm.data}">
-                            <cc:page url="admin/merchant_table.jsp" pm="${pm}"
+                            <cc:page url="admin/merchants.do" pm="${pm}"
                                      vague="&catId=${param['catId']}&groupId=${param['groupId']}&keywords=${keywords}&state=${param['state']}"></cc:page>
                         </c:if>
                         <c:if test="${empty pm.data}">
-                            <span>对不起,系统没有找到<b>${param['keywords']}</b>相关数据!</span>
+                            <span>对不起,系统没有找到<b>${keywords}</b>相关数据!</span>
                         </c:if>
                     </td>
                 </tr>
                 </tfoot>
+
             </table>
         </div>
     </div>

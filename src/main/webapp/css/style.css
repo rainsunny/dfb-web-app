@@ -1,0 +1,49 @@
+#navigate {
+    margin-top: 2em;
+}
+
+#navigate ul {
+    list-style: none;
+}
+
+#navigate li {
+    float: left;
+    width: 120px;
+    margin-left: 3px;
+    line-height: 30px;
+    text-align: center;
+    background-color: #CCC;
+}
+
+#navigate a {
+    display: block;
+    height: 30px;
+    text-decoration: none;
+}
+
+#navigate li :hover {
+    color: #FFF;
+    font-weight: bold;
+    background-color: #F00;
+}
+
+#content {
+    clear: both;
+    padding: 2em;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.info-form div {
+    margin-top: 1em;
+}
+
+.comment-list div {
+    margin-top: 1em;
+}
+
+.comment-list a {
+    width: 120px;
+    text-align: right;
+    font-weight: bold;
+}

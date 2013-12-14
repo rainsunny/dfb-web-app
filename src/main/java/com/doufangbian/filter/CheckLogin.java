@@ -8,7 +8,6 @@ import java.io.IOException;
 public class CheckLogin implements Filter {
 
     public void destroy() {
-        // TODO Auto-generated method stub
 
     }
 
@@ -17,6 +16,7 @@ public class CheckLogin implements Filter {
         // 获取session
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+
         String path = request.getRequestURI();
         if (path.contains(".jsp")) {
             if (path.contains("login.jsp")) {
@@ -36,8 +36,7 @@ public class CheckLogin implements Filter {
 
     }
 
-    public void init(FilterConfig arg0) throws ServletException {
-        // TODO Auto-generated method stub
+    public void init(FilterConfig filterConfig) throws ServletException {
 
     }
 

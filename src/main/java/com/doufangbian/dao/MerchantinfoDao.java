@@ -5,12 +5,18 @@ import com.doufangbian.entity.Dfb_merchant_image;
 import com.doufangbian.entity.MerchantInfo;
 import com.doufangbian.entity.PageModel;
 import com.doufangbian.util.DBHelper;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@Repository
 public class MerchantinfoDao {
+
+    private static Logger logger = Logger.getLogger(MerchantinfoDao.class);
 
     /**
      * 查询商家信息
@@ -18,21 +24,53 @@ public class MerchantinfoDao {
      * @param pageNo
      * @param level
      * @param areaID
-     * @param name
+     * @param keyword
      * @param catId
      * @param groupId
      * @return
      */
-    public PageModel<MerchantInfo> getMerchantList(String state, int pageNo, int level, int areaID, String name, String catId, String groupId) {
+    public PageModel<MerchantInfo> getMerchantList(String state, int pageNo, int level, int areaID, String keyword, String catId, String groupId) {
 
         PageModel<MerchantInfo> pm = new PageModel<MerchantInfo>();
 
-        pm.setSumCount(getCountyCount(state, level, areaID, name, catId, groupId));
+        pm.setSumCount(getCountyCount(state, level, areaID, keyword, catId, groupId));
 
         pm.setCurrentPage(pageNo);
 
-        String sql = "select * from merchantinfo,countyinfo where merchantinfo.name like ? and state = "
-                + state + " and countyinfo.countyID=merchantinfo.countyID ";// 默认表示全国
+        StringBuilder builder = new StringBuilder("select mm.* from merchantinfo mm left join countyinfo cc on mm.countyID = cc.countyID where 1=1 ");
+
+        if (StringUtils.isNotBlank(state)) {
+            builder.append(" and mm.state = ").append(state);
+        }
+
+        if (StringUtils.isNotBlank(groupId) && !"0".equals(groupId)) {
+            builder.append(" and mm.group_id = ").append(groupId);
+        }
+
+        switch (level) {
+            case 1:
+                builder.append(" and cc.provincialID = ").append(areaID);
+                break;
+            case 2:
+                builder.append(" and cc.cityId = ").append(areaID);
+                break;
+            case 3:
+                builder.append(" and cc.countyID = ").append(areaID);
+                break;
+        }
+
+//        builder.append(" or mm.countyID = -1");
+
+        if (StringUtils.isNotBlank(keyword)) {
+            builder.append(" and mm.name like '%").append(keyword).append("%' ");
+        }
+
+        builder.append(" order by mm.id desc");
+        builder.append(" limit ").append((pageNo - 1) * pm.getSize()).append(", ").append(pm.getSize());
+
+
+        /*String sql = "select * from merchantinfo, countyinfo where merchantinfo.name like ? and state = "
+                + state + " and countyinfo.countyID = merchantinfo.countyID "; // 默认表示全国
 
         if (level == 1) {
             sql += " and countyinfo.provincialID=" + areaID;
@@ -43,24 +81,23 @@ public class MerchantinfoDao {
         }
 
         sql += " or merchantinfo.countyID=-1 ";
+
         String str = sql;
         if (groupId != null && !"".equals(groupId) && !"0".equals(groupId)) {
             // 选了小组
-            str += " and id in(SELECT dfb_groupmerchant_map.merchant_id FROM dfb_groupmerchant_map  where group_id IN (" + groupId + "))";
-        } else if (catId != null && !"".equals(catId) && !"0".equals(catId)) {
-            // 选了大组
-            str += " and id in (SELECT dfb_groupmerchant_map.merchant_id FROM dfb_groupmerchant_map  where group_id IN (SELECT dfb_catgroup_map.group_id FROM dfb_catgroup_map WHERE dfb_catgroup_map.cat_id IN(" + catId + ")))";
-        } else if (catId != null && !"".equals(catId) && !"0".equals(catId) && groupId != null && !"".equals(groupId) && !"0".equals(groupId)) {
-            // 大小组 都选择了
-            str += " and id in(SELECT dfb_groupmerchant_map.merchant_id FROM dfb_groupmerchant_map  where group_id IN (SELECT dfb_catgroup_map.group_id FROM dfb_catgroup_map WHERE dfb_catgroup_map.cat_id IN(" + catId + "))and group_id IN (" + groupId + "))";
+            // 在商家信息里面添加了group_id，可以直接用这个字段判断；不用考虑大组
+            str += " and merchantinfo.group_id = " + groupId;
         }
+
         str += " GROUP BY id";
         str += " order by id desc";
 
-        str += " limit " + ((pageNo - 1) * pm.getSize() + "," + pm.getSize());
+        str += " limit " + ((pageNo - 1) * pm.getSize() + "," + pm.getSize());*/
+
+        logger.debug("执行execute sql: " + builder);
 
 
-        List<MerchantInfo> list = DBHelper.commQuery(str, MerchantInfo.class, name);
+        List<MerchantInfo> list = DBHelper.commQuery(builder.toString(), MerchantInfo.class);
 
         pm.setData(list);
 
@@ -107,6 +144,7 @@ public class MerchantinfoDao {
                     + catId + "))and group_id IN (" + groupId + "))";
         }
         str += " GROUP BY id )a";
+
         return DBHelper.commonQueryCount(str, name);
 
     }

@@ -19,23 +19,14 @@ public class MerchantInfo {
     private int up;// 顶条数
     private int countyID;// 县id
     private int state; //0禁用1启用
-
     private String time;//创建时间
-
     private String updatetime;//更新时间
-
     private String last_reply;//最后回复时间
-
-    private String log;//商家log
-
+    private String log;//商家logo
     private int share;//分享条数
-
     private int seecount;//浏览量
-
     private int updatecount;//最后回复更新条数
-
     private int commentcount;//商家评论条数
-
     private int groupId; // 商家所属的组号
 
     public int getId() {

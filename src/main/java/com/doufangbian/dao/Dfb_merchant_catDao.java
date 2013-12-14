@@ -5,7 +5,9 @@ import java.util.List;
 import com.doufangbian.entity.Dfb_merchant_cat;
 import com.doufangbian.entity.PageModel;
 import com.doufangbian.util.DBHelper;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class Dfb_merchant_catDao {
 	/**
 	 * 查询所有的大组信息

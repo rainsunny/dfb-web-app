@@ -1,18 +1,5 @@
 package com.doufangbian.servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-
 import com.doufangbian.dao.Dfb_groupmerchant_mapDao;
 import com.doufangbian.dao.Dfb_merchant_imageDao;
 import com.doufangbian.dao.MerchantinfoDao;
@@ -25,6 +12,17 @@ import com.jspsmart.upload.Files;
 import com.jspsmart.upload.SmartUpload;
 import com.jspsmart.upload.SmartUploadException;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 public class MerchantsServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,6 +32,7 @@ public class MerchantsServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String op = request.getParameter("op");
         String dir = request.getSession().getServletContext().getRealPath("/") + "/" + ConstantUtil.MERCHANT_IMAGE + "/";
         //获取session
@@ -76,7 +75,7 @@ public class MerchantsServlet extends HttpServlet {
             }
             request.setAttribute("keywords", keywords);
 
-            PageModel<MerchantInfo> plist = merchantinfoDao.getMerchantList(state, no, level, areaID, "%" + keywords + "%", catId, groupId);
+            PageModel<MerchantInfo> plist = merchantinfoDao.getMerchantList(state, no, level, areaID, keywords, catId, groupId);
 
             request.setAttribute("pm", plist);
         }
